@@ -4,14 +4,16 @@ using EFCore.Repo;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EFCore.Repo.Migrations
 {
     [DbContext(typeof(HeroiContexto))]
-    partial class HeroiContextoModelSnapshot : ModelSnapshot
+    [Migration("20210304120940_TecherMigration")]
+    partial class TecherMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -103,8 +105,8 @@ namespace EFCore.Repo.Migrations
                     b.Property<int>("HeroiId")
                         .HasColumnType("int");
 
-                    b.Property<string>("NomeReal")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("NomeReal")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
