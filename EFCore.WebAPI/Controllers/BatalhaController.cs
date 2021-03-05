@@ -96,13 +96,15 @@ namespace EFCore.WebAPI.Controllers
         {
             try
             {
+                var heroi = await _repo.GetHeroiById(id);
+                if (heroi != null)
+                {
+                    _repo.Delete(heroi);
+                    if (await _repo.SaveChangesAsync())
+                        return Ok("Funciona");
 
-                //_repo.Delete(model);
-                //if (await _repo.SaveChangesAsync())
-                return Ok("Funciona");
-                //else
-                //  return Ok("Deu ruim");
-
+                }
+                return Ok("Nao encontrado");
             }
             catch (Exception e)
             {

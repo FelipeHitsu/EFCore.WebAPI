@@ -14,7 +14,7 @@ namespace EFCore.Repo
 
         Task<bool> SaveChangesAsync();
         Task<Heroi> GetHeroiById(int id);
-        Task<Heroi> GetHeroiByNome(string nome);
+        Task<Heroi[]> GetHeroisByNome(string nome);
         Task<Heroi[]> GetAllHerois(); 
 
     }

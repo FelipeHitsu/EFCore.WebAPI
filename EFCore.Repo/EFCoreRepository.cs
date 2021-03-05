@@ -36,14 +36,20 @@ namespace EFCore.Repo
             return(await _context.SaveChangesAsync()) > 0;
         }
 
-        public Task<Heroi> GetHeroiById(int id)
+        public async Task<Heroi> GetHeroiById(int id)
         {
-            throw new NotImplementedException();
+            IQueryable<Heroi> query = _context.Herois.Include(h => h.IdentidadeSecreta).Include(h => h.Armas);
+            query = query.Include(h => h.HeroisBatalhas).ThenInclude(hb => hb.Batalha);
+            query = query.AsNoTracking().OrderBy(h => h.Id);
+            return await query.FirstOrDefaultAsync(h => h.Id == id);
         }
 
-        public Task<Heroi> GetHeroiByNome(string nome)
+        public async Task<Heroi[]> GetHeroisByNome(string nome)
         {
-            throw new NotImplementedException();
+            IQueryable<Heroi> query = _context.Herois.Include(h => h.IdentidadeSecreta).Include(h => h.Armas);
+            query = query.Include(h => h.HeroisBatalhas).ThenInclude(hb => hb.Batalha);
+            query = query.AsNoTracking().Where(h => h.Nome.Contains(nome)).OrderBy(h => h.Id);
+            return await query.ToArrayAsync();
         }
 
         public async Task<Heroi[]> GetAllHerois()
