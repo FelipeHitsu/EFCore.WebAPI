@@ -15,11 +15,11 @@ namespace EFCore.WebAPI.Controllers
     [ApiController]
     public class BatalhaController : ControllerBase
     {
-        private readonly HeroiContexto _context;
+        public IEFCoreRepository _repo { get; }
 
-        public BatalhaController(HeroiContexto context)
+        public BatalhaController(IEFCoreRepository repo)
         {
-            _context = context;
+            _repo = repo;
         }
         // GET: api/<BatalhaController>
         [HttpGet]
@@ -29,7 +29,7 @@ namespace EFCore.WebAPI.Controllers
             {
                 return Ok(new Batalha());
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return BadRequest("Erro: " + e);
             }
@@ -37,21 +37,12 @@ namespace EFCore.WebAPI.Controllers
 
         // GET api/<BatalhaController>/5
         [HttpGet("{id}", Name = "GetBatalha")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/<BatalhaController>
-        [HttpPost]
-        public ActionResult Post(Batalha model)
+        public async Task<IActionResult> GetHerois(int id)
         {
             try
             {
-                _context.Batalhas.Add(model);
-                _context.SaveChanges();
-
-                return Ok("Funciona");
+                var herois = await _repo.GetAllHerois();
+                return Ok(herois);
             }
             catch(Exception e)
             {
@@ -59,8 +50,28 @@ namespace EFCore.WebAPI.Controllers
             }
         }
 
+        // POST api/<BatalhaController>
+        [HttpPost]
+        public async Task<IActionResult> Post(Batalha model)
+        {
+            try
+            {
+
+                _repo.Add(model);
+                if (await _repo.SaveChangesAsync())
+                    return Ok("Funciona");
+                else
+                    return Ok("Deu ruim");
+
+            }
+            catch (Exception e)
+            {
+                return BadRequest("Erro: " + e);
+            }
+        }
+
         // PUT api/<BatalhaController>/5
-        [HttpPut("{id}")]
+        /*[HttpPut("{id}")]
         public ActionResult Put(int id,Batalha model)
         {
             try
@@ -77,12 +88,26 @@ namespace EFCore.WebAPI.Controllers
             {
                 return BadRequest("Erro: " + e);
             }
-        }
+        }*/
 
         // DELETE api/<BatalhaController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
+            try
+            {
+
+                //_repo.Delete(model);
+                //if (await _repo.SaveChangesAsync())
+                return Ok("Funciona");
+                //else
+                //  return Ok("Deu ruim");
+
+            }
+            catch (Exception e)
+            {
+                return BadRequest("Erro: " + e);
+            }
         }
     }
 }
